@@ -1,0 +1,44 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow" style="width: 350px">
+    <h3 class="text-center mb-4">🔐 Login</h3>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input
+          formControlName="username"
+          type="text"
+          class="form-control"
+          placeholder="es. admin"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+          placeholder="es. admin123"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="loading || !form.valid">
+        {{ loading ? 'Accesso in corso...' : 'Accedi' }}
+      </button>
+    </form>
+
+    <hr />
+
+    <p class="text-center mb-0">
+      Non hai un account?
+      <a routerLink="/register" class="link-primary"> Registrati </a>
+    </p>
+  </div>
+</div>

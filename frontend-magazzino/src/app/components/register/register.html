@@ -1,0 +1,68 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow" style="width: 400px">
+    <h3 class="text-center mb-4">📝 Registrazione</h3>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="register()">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input
+          formControlName="username"
+          type="text"
+          class="form-control"
+          placeholder="es. marco"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email (opzionale)</label>
+        <input
+          formControlName="email"
+          type="email"
+          class="form-control"
+          placeholder="es. marco@example.com"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+          placeholder="Minimo 4 caratteri"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Conferma Password</label>
+        <input
+          formControlName="passwordConfirm"
+          type="password"
+          class="form-control"
+          placeholder="Ripeti la password"
+          [disabled]="loading"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="loading || !form.valid">
+        {{ loading ? 'Registrazione in corso...' : 'Registrati' }}
+      </button>
+    </form>
+
+    <hr />
+
+    <p class="text-center mb-0">
+      Hai già un account?
+      <button type="button" (click)="goToLogin()" class="btn btn-link p-0">Login</button>
+    </p>
+  </div>
+</div>

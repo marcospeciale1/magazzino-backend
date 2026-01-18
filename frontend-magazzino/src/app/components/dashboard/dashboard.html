@@ -1,0 +1,112 @@
+<nav class="navbar navbar-dark bg-primary px-4 mb-4">
+  <span class="navbar-brand mb-0 h1">📦 Magazzino</span>
+  <button (click)="logout()" class="btn btn-outline-light btn-sm">Esci</button>
+</nav>
+
+<div class="container">
+  <div class="card p-4 mb-4 bg-light shadow-sm">
+    <h5 class="mb-3">
+      @if (editingProductId) {
+        📝 Modifica Prodotto
+      } @else {
+        ➕ Aggiungi Prodotto
+      }
+    </h5>
+    <form
+      [formGroup]="form"
+      (ngSubmit)="editingProductId ? saveEdit(editingProductId) : addProduct()"
+      class="row g-2"
+    >
+      <div class="col-md-2">
+        <input formControlName="codice" class="form-control" placeholder="Codice SKU" />
+      </div>
+      <div class="col-md-3">
+        <input formControlName="nome" class="form-control" placeholder="Nome Prodotto" />
+      </div>
+      <div class="col-md-3">
+        <textarea
+          formControlName="descrizione"
+          class="form-control"
+          placeholder="Descrizione (opzionale)"
+          rows="1"
+        ></textarea>
+      </div>
+      <div class="col-md-2">
+        <input formControlName="prezzo" type="number" class="form-control" placeholder="Prezzo" />
+      </div>
+      <div class="col-md-1">
+        <input formControlName="quantita" type="number" class="form-control" placeholder="Qtà" />
+      </div>
+      <div class="col-md-2">
+        @if (editingProductId) {
+          <button type="submit" class="btn btn-primary w-100" [disabled]="!form.valid">
+            Salva Modifica
+          </button>
+        } @else {
+          <button type="submit" class="btn btn-success w-100" [disabled]="!form.valid">
+            Salva
+          </button>
+        }
+      </div>
+      @if (editingProductId) {
+        <div class="col-12">
+          <button type="button" (click)="cancelEdit()" class="btn btn-secondary w-100">
+            Annulla Modifica
+          </button>
+        </div>
+      }
+    </form>
+  </div>
+
+  <div class="card p-3 mb-4 bg-white shadow-sm">
+    <input
+      [formControl]="searchControl"
+      type="text"
+      class="form-control"
+      placeholder="🔍 Cerca per nome o codice..."
+    />
+  </div>
+
+  <table class="table table-hover table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Codice</th>
+        <th>Nome</th>
+        <th>Descrizione</th>
+        <th>Prezzo</th>
+        <th>Quantità</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (filteredProducts.length > 0) {
+        @for (p of filteredProducts; track p.id) {
+          <tr>
+            <td>{{ p.codice }}</td>
+            <td>{{ p.nome }}</td>
+            <td class="text-muted" style="font-size: 0.9em">{{ p.descrizione || '-' }}</td>
+            <td>€ {{ p.prezzo }}</td>
+            <td [class.text-danger]="p.quantita < 5" [class.fw-bold]="p.quantita < 5">
+              {{ p.quantita }}
+            </td>
+            <td class="text-center">
+              @if (editingProductId === p.id) {
+                <button (click)="saveEdit(p.id!)" class="btn btn-primary btn-sm me-2">Salva</button>
+                <button (click)="cancelEdit()" class="btn btn-secondary btn-sm">Annulla</button>
+              } @else {
+                <button (click)="startEdit(p)" class="btn btn-warning btn-sm me-2">Modifica</button>
+                <button (click)="deleteProduct(p.id!)" class="btn btn-danger btn-sm">
+                  Elimina
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      } @else {
+        <tr>
+          <td colspan="5" class="text-center text-muted py-3">Nessun prodotto trovato</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
